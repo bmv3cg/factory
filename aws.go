@@ -12,13 +12,14 @@ type AWSClient struct {
 	Client *s3.S3
 }
 
-func (c *AWSClient) Newclient(region string) string {
+func (c *AWSClient) Newclient(region string) *AWSClient {
 	sess, _ := session.NewSession(&aws.Config{
 		Region: aws.String(region)},
 	)
 	s3Client := s3.New(sess)
-	c = &AWSClient{Client: s3Client}
-	return "Aws client created"
+	return &AWSClient{Client: s3Client}
+	//c = &AWSClient{Client: s3Client}
+	//return "Aws client created"
 }
 
 func (c *AWSClient) CreateBucket(bucket string) error {
@@ -70,7 +71,7 @@ func (c *AWSClient) Listbuckets() (b []string) {
 	return b
 }
 
-func (c *AWSClient) DeleteBucket(bucket string) error {
+func (c *AWSClient) DeleteBucketAWS(bucket string) error {
 
 	// Delete the S3 Bucket
 	_, err := c.Client.DeleteBucket(&s3.DeleteBucketInput{

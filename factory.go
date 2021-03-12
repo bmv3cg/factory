@@ -8,15 +8,15 @@ type ObjectStore interface {
 	DeleteBucket(string)
 }
 
-func GetClient(cloudProvider string) ObjectStore {
+func GetClient(cloudProvider string) string {
 	//var objstore ObjectStore
 	switch cloudProvider {
 	case "aws":
-		return ObjectStore.Newclient("us-west-2")
+		return AWSClient{Client: nil}.Newclient("")
 	case "gcp":
-		return ObjectStore.Newclient()
+		return GCPclient{Client: nil, Ctx: nil}.Newclient()
 	default:
-		return nil
+		return ""
 	}
 
 }

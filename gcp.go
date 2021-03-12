@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"cloud.google.com/go/storage"
 	"google.golang.org/api/iterator"
@@ -13,18 +14,19 @@ type GCPclient struct {
 	Ctx    context.Context
 }
 
-func (g *GCPclient) Newclient() string {
+func (g *GCPclient) Newclient() *GCPclient {
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
 		fmt.Println("failed to create storage client")
 	}
-	g = &GCPclient{Client: client, Ctx: ctx}
-	return "GCP client created"
+	//g = &GCPclient{Client: client, Ctx: ctx}
+	return &GCPclient{Client: client, Ctx: ctx}
+	//return "GCP client created"
 }
 
-func (g *GCPclient) CreateBucket(projectID, bucketName string) error {
-
+func (g *GCPclient) CreateBucket(bucketName string) error {
+	projectID := os.Getenv("PROJECT_ID")
 	bucket := g.Client.Bucket(bucketName)
 	if err := bucket.Create(g.Ctx, projectID, nil); err != nil {
 		return fmt.Errorf("Bucket(%q).Create: %v", bucketName, err)
