@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -11,15 +12,16 @@ type AWSClient struct {
 	Client *s3.S3
 }
 
-func NewAWSclient(region string) *AWSClient {
+func (c *AWSClient) Newclient(region string) string {
 	sess, _ := session.NewSession(&aws.Config{
 		Region: aws.String(region)},
 	)
 	s3Client := s3.New(sess)
-	return &AWSClient{Client: s3Client}
+	c = &AWSClient{Client: s3Client}
+	return "Aws client created"
 }
 
-func (c *AWSClient) CreateBucketAWS(bucket string) error {
+func (c *AWSClient) CreateBucket(bucket string) error {
 
 	_, err := c.Client.CreateBucket(&s3.CreateBucketInput{
 		Bucket: aws.String(bucket),
@@ -39,7 +41,7 @@ func (c *AWSClient) CreateBucketAWS(bucket string) error {
 }
 
 // GetBucket determines whether we have this bucket
-func (c *AWSClient) GetBucketAWS(bucket string) error {
+func (c *AWSClient) GetBucket(bucket string) error {
 
 	_, err := c.Client.HeadBucket(&s3.HeadBucketInput{
 		Bucket: aws.String(bucket),
@@ -51,7 +53,7 @@ func (c *AWSClient) GetBucketAWS(bucket string) error {
 	return nil
 }
 
-func (c *AWSClient) ListbucketsAWS() (b []string) {
+func (c *AWSClient) Listbuckets() (b []string) {
 
 	result, err := c.Client.ListBuckets(nil)
 	if err != nil {
@@ -68,7 +70,7 @@ func (c *AWSClient) ListbucketsAWS() (b []string) {
 	return b
 }
 
-func (c *AWSClient) DeleteBucketAWS(bucket string) error {
+func (c *AWSClient) DeleteBucket(bucket string) error {
 
 	// Delete the S3 Bucket
 	_, err := c.Client.DeleteBucket(&s3.DeleteBucketInput{

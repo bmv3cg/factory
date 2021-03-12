@@ -13,29 +13,30 @@ type GCPclient struct {
 	Ctx    context.Context
 }
 
-func NewGCPclient() *GCPclient {
+func (g *GCPclient) Newclient() string {
 	ctx := context.Background()
-	c, err := storage.NewClient(ctx)
+	client, err := storage.NewClient(ctx)
 	if err != nil {
 		fmt.Println("failed to create storage client")
 	}
-	return &GCPclient{Client: c, Ctx: ctx}
+	g = &GCPclient{Client: client, Ctx: ctx}
+	return "GCP client created"
 }
 
-func (c *GCPclient) CreateBucketGCP(projectID, bucketName string) error {
+func (g *GCPclient) CreateBucket(projectID, bucketName string) error {
 
-	bucket := c.Client.Bucket(bucketName)
-	if err := bucket.Create(c.Ctx, projectID, nil); err != nil {
+	bucket := g.Client.Bucket(bucketName)
+	if err := bucket.Create(g.Ctx, projectID, nil); err != nil {
 		return fmt.Errorf("Bucket(%q).Create: %v", bucketName, err)
 	}
 	fmt.Println("Bucket created", bucketName)
 	return nil
 }
 
-func (c *GCPclient) DeleteBucketGCP(bucketName string) error {
+func (g *GCPclient) DeleteBucket(bucketName string) error {
 
-	bucket := c.Client.Bucket(bucketName)
-	if err := bucket.Delete(c.Ctx); err != nil {
+	bucket := g.Client.Bucket(bucketName)
+	if err := bucket.Delete(g.Ctx); err != nil {
 		return fmt.Errorf("Bucket(%q).Delete: %v", bucketName, err)
 	}
 	fmt.Println("Bucket %v deleted\n", bucketName)
@@ -43,10 +44,10 @@ func (c *GCPclient) DeleteBucketGCP(bucketName string) error {
 }
 
 // listBuckets lists buckets in the project.
-func (c *GCPclient) ListBucketsGCP(projectID string) ([]string, error) {
+func (g *GCPclient) ListBuckets(projectID string) ([]string, error) {
 
 	var buckets []string
-	it := c.Client.Buckets(c.Ctx, projectID)
+	it := g.Client.Buckets(g.Ctx, projectID)
 	for {
 		battrs, err := it.Next()
 		if err == iterator.Done {

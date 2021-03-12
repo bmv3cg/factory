@@ -1,36 +1,22 @@
 package main
 
-type ObjectStoreClient interface{
-	NewAWSclient(string)
-	NewGCPclient()	
-  }
-  
-  type ObjectStore interface{
-	
-	NewAWSclient(string)
-	CreateBucketAWS(string)
-	GetBucketAWS(string)
-	ListbucketsAWS(string)
-	DeleteBucketAWS(string)
-	
-	NewGCPclient()	
-	CreateBucketGCP(string, string)
-	ListBucketsGCP(string)
-	DeleteBucketGCP(string)
-  
-  }
-  
-  
-func GetClient(cloudProvider string)(ObjectStoreClient){
-  
+type ObjectStore interface {
+	Newclient(string)
+	CreateBucket(string)
+	GetBucket(string)
+	Listbuckets(string)
+	DeleteBucket(string)
+}
+
+func GetClient(cloudProvider string) ObjectStore {
+	//var objstore ObjectStore
 	switch cloudProvider {
 	case "aws":
-		return NewAWSclient("us-west-2")
+		return ObjectStore.Newclient("us-west-2")
 	case "gcp":
-	  return NewGCPclient()	  
-	default: 
-		return nil          
+		return ObjectStore.Newclient()
+	default:
+		return nil
 	}
-  
+
 }
-  

@@ -1,13 +1,12 @@
 package main
 
-import (
+import "fmt"
 
 //	"fmt"
 
-)
-
 func main() {
 
- c := GetClient("gcp")
+	c := GetClient("gcp")
 
+	fmt.Println(c)
 }
