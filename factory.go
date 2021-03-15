@@ -4,19 +4,25 @@ type ObjectStore interface {
 	Newclient(string)
 	CreateBucket(string)
 	GetBucket(string)
-	Listbuckets(string)
+	ListBuckets(string)
 	DeleteBucket(string)
 }
 
-func GetClient(cloudProvider string) string {
-	//var objstore ObjectStore
+type Client struct {
+	aws AWSClient
+	gcp GCPClient
+}
+
+func GetClient(cloudProvider string) Client {
+	//var client ObjectStore
 	switch cloudProvider {
 	case "aws":
-		return AWSClient{Client: nil}.Newclient("")
+		return NewclientAWS("us-west-2")
 	case "gcp":
-		return GCPclient{Client: nil, Ctx: nil}.Newclient()
+		return NewClientGCP()
 	default:
-		return ""
+		return Client{}
+
 	}
 
 }

@@ -9,23 +9,22 @@ import (
 	"google.golang.org/api/iterator"
 )
 
-type GCPclient struct {
+type GCPClient struct {
 	Client *storage.Client
 	Ctx    context.Context
 }
 
-func (g *GCPclient) Newclient() *GCPclient {
+func NewClientGCP() Client {
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
 		fmt.Println("failed to create storage client")
 	}
-	//g = &GCPclient{Client: client, Ctx: ctx}
-	return &GCPclient{Client: client, Ctx: ctx}
-	//return "GCP client created"
+	return Client{gcp: GCPClient{Client: client, Ctx: ctx}}
+
 }
 
-func (g *GCPclient) CreateBucket(bucketName string) error {
+func (g *GCPClient) CreateBucket(bucketName string) error {
 	projectID := os.Getenv("PROJECT_ID")
 	bucket := g.Client.Bucket(bucketName)
 	if err := bucket.Create(g.Ctx, projectID, nil); err != nil {
@@ -35,7 +34,7 @@ func (g *GCPclient) CreateBucket(bucketName string) error {
 	return nil
 }
 
-func (g *GCPclient) DeleteBucket(bucketName string) error {
+func (g *GCPClient) DeleteBucket(bucketName string) error {
 
 	bucket := g.Client.Bucket(bucketName)
 	if err := bucket.Delete(g.Ctx); err != nil {
@@ -46,7 +45,7 @@ func (g *GCPclient) DeleteBucket(bucketName string) error {
 }
 
 // listBuckets lists buckets in the project.
-func (g *GCPclient) ListBuckets(projectID string) ([]string, error) {
+func (g *GCPClient) ListBuckets(projectID string) ([]string, error) {
 
 	var buckets []string
 	it := g.Client.Buckets(g.Ctx, projectID)
