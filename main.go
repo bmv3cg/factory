@@ -8,13 +8,12 @@ func main() {
 	//
 	//obj.CreateBucket("sadss")
 
-	//g := GetClient("gcp")
-	// gcp.CreateBucket("ssssssfdsabcjhbaskjbf")
-	//fmt.Println(g.gcp.ListBuckets("diesel-harmony-306813"))
+	g := GetClient("gcp")
+	g.gcp.CreateBucket("gcp-bucket-15-3")
+	fmt.Println(g.gcp.ListBuckets("diesel-harmony-306813"))
 
-	c := GetClient("AWS")
-	fmt.Println(c)
-	//c.aws.CreateBucket("sasf")
-	//c.aws.Listbuckets()
+	c := GetClient("aws")
+	c.aws.CreateBucket("aws-bukcet-test-15-3")
+	c.aws.Listbuckets()
 
 }
