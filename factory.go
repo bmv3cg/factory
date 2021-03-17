@@ -1,11 +1,10 @@
 package main
 
 type ObjectStore interface {
-	Newclient(string)
-	CreateBucket(string)
-	GetBucket(string)
-	ListBuckets(string)
-	DeleteBucket(string)
+	CreateBucket(string) error
+	GetBucket(string) error
+	ListBuckets(string) ([]string, error)
+	DeleteBucket(string) error
 }
 
 type Client struct {
